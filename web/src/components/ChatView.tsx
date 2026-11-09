@@ -93,7 +93,7 @@ export function ChatView({
         ))}
         {running && todos.some((t) => t.status === "in_progress") && (
           <div className="text-[12px] text-zinc-500">
-            Sedang mengerjakan: {todos.find((t) => t.status === "in_progress")?.content}
+            Working on: {todos.find((t) => t.status === "in_progress")?.content}
           </div>
         )}
         <div ref={bottomRef} />

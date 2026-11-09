@@ -24,27 +24,27 @@ echo -e "${RESET}"
 if command -v pkg >/dev/null 2>&1; then
   say "Update Termux packages (nodejs-lts, git)…"
   pkg update -y && pkg upgrade -y || true
-  pkg install -y nodejs-lts git || { warn "pkg install gagal, cek koneksiinternet"; exit 1; }
+  pkg install -y nodejs-lts git || { warn "pkg install failed — check your internet connection"; exit 1; }
 else
-  warn "pkg tidak ditemukan — diasumsikan bukan Termux, pakai node sistem."
-  command -v node >/dev/null || { echo "Node.js >= 18 wajib terinstall"; exit 1; }
+  warn "pkg not found — assuming non-Termux environment, using system node."
+  command -v node >/dev/null || { echo "Node.js >= 18 is required"; exit 1; }
 fi
 
 node -v
-say "Node $(node -v) siap."
+say "Node $(node -v) ready."
 
-# 2. Build WebUI (skip kalau dist bawaan masih ada)
+# 2. Build WebUI (skip if the bundled dist still exists)
 if [ -f web/dist/index.html ]; then
-  say "WebUI bawaan ditemukan — skip build. (hapus web/dist/ untuk rebuild)"
+  say "Bundled WebUI found — skipping build. (delete web/dist/ to rebuild)"
 else
-  say "Install dependensi WebUI + build (sekali saja, ~1-2 menit)…"
+  say "Installing WebUI dependencies + building (one-time, ~1-2 min)…"
   npm install --prefix web --no-audit --no-fund
   npm --prefix web run build
 fi
 
 # 3. Config awal
 if [ ! -f "$HOME/.opencode-agent/config.json" ]; then
-  say "Buat konfigurasi awal di $HOME/.opencode-agent/config.json"
+  say "Creating initial config at $HOME/.opencode-agent/config.json"
   mkdir -p "$HOME/.opencode-agent"
   cat > "$HOME/.opencode-agent/config.json" <<'CFG'
 {
@@ -56,19 +56,19 @@ if [ ! -f "$HOME/.opencode-agent/config.json" ]; then
 }
 CFG
   sed -i "s|PLACEHOLDER_HOME|$HOME|" "$HOME/.opencode-agent/config.json"
-  warn "API key masih kosong! Edit file config atau buka Settings di WebUI."
-  warn "Tanpa API key, kamu tetap bisa coba mode demo: provider = \"mock\"."
+  warn "API key is still empty! Edit the config file or open Settings in the WebUI."
+  warn "Without an API key you can still try the demo mode: provider = \"mock\"."
 fi
 
 # 4. Start
-say "Cek tipe handset (opsional)…"
+say "Checking handset type (optional)…"
 command -v termux-wake-lock >/dev/null 2>&1 && termux-wake-lock || true
 
-say "Menjalankan server…"
+say "Starting server…"
 echo -e "${BOLD}"
-echo "  Buka di browser HP:   http://localhost:3010"
-echo "  Buka dari PC/Laptop:  http://<ip-hp>:3010   (Wi-Fi sama)"
-echo "  Stop server: Ctrl+C   |  Lari lagi: npm start"
+echo "  Open on this phone:   http://localhost:3010"
+echo "  Open from PC/Laptop:  http://<phone-ip>:3010   (same Wi-Fi)"
+echo "  Stop server: Ctrl+C   |  Run again: npm start"
 echo -e "${RESET}"
 
 OPENCODE_AGENT_PORT="${OPENCODE_AGENT_PORT:-3010}" node server/index.js

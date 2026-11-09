@@ -1,46 +1,46 @@
 # OpenCode Agent — Termux Edition 📱
 
-Porting **package agent** dari [anomalyco/opencode](https://github.com/anomalyco/opencode) (v2.2.5, MIT) yang dibuat **khusus Android/Termux**, dengan antarmuka **fullstack Vite WebUI** bergaya Z.ai Agent — **bukan CLI/TUI lagi**.
+A port of the **agent package** from [anomalyco/opencode](https://github.com/anomalyco/opencode) (v2.2.5, MIT), rebuilt **exclusively for Android/Termux**, with a **fullstack Vite WebUI** styled after the Z.ai Agent — **no more CLI/TUI**.
 
-> Repo asli diambil via `git clone https://github.com/anomalyco/opencode`, lalu arsitektur package agent-nya (`packages/core`, `packages/ai`, `packages/server`) diporting ke runtime Node.js murni tanpa dependensi native, dan `packages/tui` dibuang dan diganti WebUI.
+> The original repo was cloned via `git clone https://github.com/anomalyco/opencode`, then the agent package architecture (`packages/core`, `packages/ai`, `packages/server`) was ported to a pure Node.js runtime with zero native dependencies, and `packages/tui` was dropped and replaced by the WebUI.
 
-## Apa yang dipindahkan dari opencode
+## What was ported from opencode
 
-| Package asli (opencode) | Port di sini | Catatan |
+| Original package (opencode) | Port here | Notes |
 | --- | --- | --- |
-| `packages/core/src/session` (Bun + drizzle/SQLite) | `server/store.js` (JSONL append-only) | Format message part ala opencode (`text`, `tool`, state machine) |
-| `packages/ai/src/loop.ts` (Effect runtime) | `server/agent.js` (async generator) | Multi-round tool calling, abortable per sesi |
+| `packages/core/src/session` (Bun + drizzle/SQLite) | `server/store.js` (append-only JSONL) | opencode-style message part format (`text`, `tool`, state machine) |
+| `packages/ai/src/loop.ts` (Effect runtime) | `server/agent.js` (async generator) | Multi-round tool calling, abortable per session |
 | `packages/ai/src/providers/*` | `server/providers.js` | OpenAI-compatible (Z.ai GLM, OpenRouter, DeepSeek, Ollama) + Anthropic + Mock |
-| `packages/core/src/tool/*` | `server/tools.js` | `bash`, `read`, `write`, `edit`, `glob`, `grep`, `todowrite` — tanpa dependensi native |
-| `packages/server` (Hono) | `server/index.js` (node:http) | 1 port untuk API + WebUI statis |
-| `packages/tui` (OpenTUI) | ❌ **dihapus** → `web/` (Vite + React) | Tema gelap mirip Z.ai agent |
+| `packages/core/src/tool/*` | `server/tools.js` | `bash`, `read`, `write`, `edit`, `glob`, `grep`, `todowrite` — no native dependencies |
+| `packages/server` (Hono) | `server/index.js` (node:http) | 1 port for both API + static WebUI |
+| `packages/tui` (OpenTUI) | ❌ **removed** → `web/` (Vite + React) | Dark theme similar to the Z.ai agent |
 
-## Fitur WebUI (mirip Z.ai Agent)
+## WebUI features (similar to Z.ai Agent)
 
-- 💬 Chat streaming SSE dengan **markdown + reasoning collapsible**
-- 🛠 **Tool call cards** — status live (running ✓/✕), input/output collapsible, durasi
-- ☑️ **Todo list** agent di sidebar (dari tool `todowrite`)
-- 📁 **Workspace panel** — file browser + file viewer + terminal quick-exec
-- ⚙️ **Settings** — provider, base URL, API key, model, workdir + preset cepat (Z.ai / OpenRouter / DeepSeek / Ollama)
-- 📱 Mobile-first (drawer sidebar, touch-friendly) — memang buat HP
-- 🌐 Bisa diakses dari browser HP sendiri **atau** dari PC dalam Wi-Fi yang sama
+- 💬 SSE streaming chat with **markdown + collapsible reasoning**
+- 🛠 **Tool call cards** — live status (running ✓/✕), collapsible input/output, duration
+- ☑️ Agent **todo list** in the sidebar (from the `todowrite` tool)
+- 📁 **Workspace panel** — file browser + file viewer + quick terminal exec
+- ⚙️ **Settings** — provider, base URL, API key, model, workdir + quick presets (Z.ai / OpenRouter / DeepSeek / Ollama)
+- 📱 Mobile-first (drawer sidebar, touch-friendly) — designed for phones
+- 🌐 Accessible from the phone's own browser **or** from a PC on the same Wi-Fi
 
-## Instalasi di Termux
+## Installing on Termux
 
-> Bundle `web/dist/` versi produksi **sudah tersedia** di package ini — `setup-termux.sh` akan melewati build jika dist masih ada, jadi install bisa cuma beberapa detik. Hapus `web/dist/` kalau mau rebuild dari source.
+> The production `web/dist/` bundle **is included** in this package — `setup-termux.sh` skips the build if dist already exists, so installation takes just a few seconds. Delete `web/dist/` if you want to rebuild from source.
 
 ```bash
 pkg install git
-git clone <repo/package ini> opencode-agent
+git clone <this repo/package> opencode-agent
 cd opencode-agent
 bash setup-termux.sh
 ```
 
-Script otomatis: `pkg install nodejs-lts` → build WebUI (sekali saja) → buat config → jalankan server di **http://localhost:3010** (bind `0.0.0.0`, bisa dibuka dari device lain).
+The script automatically: installs `nodejs-lts` via `pkg` → builds the WebUI (once) → creates the config → starts the server at **http://localhost:3010** (binds `0.0.0.0`, reachable from other devices).
 
-### Konfigurasi
+### Configuration
 
-Edit `~/.opencode-agent/config.json`, atau via WebUI → **⚙ Settings**. Bisa juga env var (menimpa config):
+Edit `~/.opencode-agent/config.json`, or use the WebUI → **⚙ Settings**. Environment variables (override the config) also work:
 
 ```bash
 OPENCODE_AGENT_PROVIDER=openai-compatible \
@@ -51,40 +51,40 @@ OPENCODE_AGENT_WORKDIR=$HOME/projects \
 npm start
 ```
 
-Provider `mock` tersedia untuk demo/tes tanpa API key.
+The `mock` provider is available for demo/testing without an API key.
 
-### Tips Termux
+### Termux tips
 
-- `termux-wake-lock` sebelum sesi panjang agar proses tidak dimatikan Android.
-- Tanpa akun root. Tidak ada dependensi native (tanpa better-sqlite3/node-pty) → build bersih di ARM.
-- Akses dari PC: cari IP HP (`ifconfig` di Termux) lalu buka `http://<ip-hp>:3010`.
-- Agent menjalankan `bash` tanpa sandbox di `workdir` — gunakan sebagaimana opencode asli: percayai model, cek perubahan dengan `git`.
+- Run `termux-wake-lock` before long sessions so Android does not kill the process.
+- No root account needed. No native dependencies (no better-sqlite3/node-pty) → clean build on ARM.
+- Access from PC: find the phone's IP (`ifconfig` in Termux), then open `http://<phone-ip>:3010`.
+- The agent runs `bash` without a sandbox inside `workdir` — treat it like the original opencode: trust the model, review changes with `git`.
 
-## Menjalankan dari source
+## Running from source
 
 ```bash
-npm run setup        # build web/dist sekali
+npm run setup        # build web/dist once
 npm start            # server :3010 + serve WebUI
-# atau mode dev (hot reload frontend):
+# or dev mode (frontend hot reload):
 node server/index.js &  # API :3010
-npm run web:dev         # Vite :5173 (proxy /api)
+npm run web:dev         # Vite :5173 (proxies /api)
 ```
 
 ## API
 
-| Endpoint | Method | Fungsi |
+| Endpoint | Method | Purpose |
 | --- | --- | --- |
-| `/api/health` | GET | status server (termux?, versi) |
-| `/api/config` | GET/POST | konfigurasi provider/model/workdir |
-| `/api/sessions` | GET/POST | daftar / buat sesi |
-| `/api/sessions/:id` | GET/DELETE | detail (messages+todos) / hapus |
-| `/api/sessions/:id/run` | POST | kirim pesan → **SSE stream** event |
-| `/api/sessions/:id/stop` | POST | batalkan run |
-| `/api/exec` | POST | jalankan perintah cepat (panel terminal) |
+| `/api/health` | GET | server status (termux?, version) |
+| `/api/config` | GET/POST | provider/model/workdir configuration |
+| `/api/sessions` | GET/POST | list / create sessions |
+| `/api/sessions/:id` | GET/DELETE | detail (messages+todos) / delete |
+| `/api/sessions/:id/run` | POST | send message → **SSE stream** of events |
+| `/api/sessions/:id/stop` | POST | abort a run |
+| `/api/exec` | POST | run a quick command (terminal panel) |
 | `/api/files` `/api/file` | GET | file tree & preview |
 
-Event SSE: `user-message`, `message-start`, `text-delta`, `think-delta`, `tool-start`, `tool-end`, `todo`, `usage`, `done`, `error`.
+SSE events: `user-message`, `message-start`, `text-delta`, `think-delta`, `tool-start`, `tool-end`, `todo`, `usage`, `done`, `error`.
 
-## Lisensi
+## License
 
-MIT — mengikuti proyek asal [opencode](https://github.com/anomalyco/opencode).
+MIT — following the upstream [opencode](https://github.com/anomalyco/opencode) project.

@@ -9,10 +9,10 @@ import { WorkspacePanel } from "./components/WorkspacePanel";
 
 function Welcome({ termux }: { termux: boolean }) {
   const suggestions = [
-    "Jelaskan struktur project di direktori ini",
-    "Bikin script Python hello world lalu jalankan",
-    "Cari semua file .sh di home dan ringkas isinya",
-    "Buat todo list buat bikin REST API sederhana",
+    "Explain the project structure in this directory",
+    "Create a hello world Python script and run it",
+    "Find all .sh files in home and summarize their contents",
+    "Make a todo list for building a simple REST API",
   ];
   return (
     <div className="flex flex-col items-center pt-[14vh] text-center">
@@ -23,8 +23,8 @@ function Welcome({ termux }: { termux: boolean }) {
         OpenCode Agent <span className="text-zinc-500">· Termux</span>
       </h1>
       <p className="mt-1 max-w-md text-[13.5px] leading-relaxed text-zinc-500">
-        Coding agent berjalan lokal di {termux ? "Android Termux kamu" : "perangkat ini"} — bisa
-        bash, baca/tulis file, dan menjaga todo list. Tidak ada TUI, semuanya dari browser.
+        Coding agent running locally on {termux ? "your Android Termux" : "this device"} — can run
+        bash, read/write files, and keep a todo list. No TUI, everything from the browser.
       </p>
       <div className="mt-6 grid w-full max-w-xl grid-cols-1 gap-2 sm:grid-cols-2">
         {suggestions.map((s) => (
@@ -150,7 +150,7 @@ export default function App() {
         setRunning(false);
         abortRef.current = null;
         refreshSessions();
-        if (activeId) loadSession(activeId); // resync dengan server
+        if (activeId) loadSession(activeId); // resync with server
         break;
       case "error":
         setRunning(false);
@@ -214,7 +214,7 @@ export default function App() {
         <div className="fixed inset-0 z-30 bg-black/50 lg:hidden" onClick={() => setDrawerOpen(false)} />
       )}
 
-      {/* sidebar: drawer di mobile */}
+      {/* sidebar: drawer on mobile */}
       <div
         className={`fixed inset-y-0 left-0 z-40 transition-transform lg:relative lg:z-auto lg:translate-x-0 ${
           drawerOpen ? "translate-x-0" : "-translate-x-full"
@@ -247,7 +247,7 @@ export default function App() {
           <button
             onClick={() => setDrawerOpen(true)}
             className="rounded-lg p-2 text-zinc-300 hover:bg-zinc-800"
-            aria-label="Buka menu"
+            aria-label="Open menu"
           >
             ☰
           </button>
@@ -260,7 +260,7 @@ export default function App() {
           <button
             onClick={() => setShowSettings(true)}
             className="rounded-lg p-2 text-zinc-400 hover:bg-zinc-800"
-            aria-label="Pengaturan"
+            aria-label="Settings"
           >
             ⚙
           </button>
@@ -282,7 +282,7 @@ export default function App() {
             config ? (
               <Welcome termux={Boolean(config.termux)} />
             ) : (
-              <div className="p-6 text-center text-zinc-500">Memuat…</div>
+              <div className="p-6 text-center text-zinc-500">Loading…</div>
             )
           }
         />
@@ -294,7 +294,7 @@ export default function App() {
             onClick={() => setShowSettings(true)}
             className="pb-2 text-center text-[11.5px] text-amber-400/90 underline underline-offset-2"
           >
-            API key belum diset — klik untuk konfigurasi (atau pakai mode mock)
+            API key not set — tap to configure (or use mock mode)
           </button>
         )}
       </main>

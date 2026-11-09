@@ -74,7 +74,7 @@ function serveStatic(req, res, urlPath) {
     return res.end(
       `<!doctype html><html><head><meta charset="utf-8"><title>OpenCode Agent</title></head>
 <body style="background:#0a0a0a;color:#e5e5e5;font-family:system-ui;padding:40px">
-<h1>WebUI belum di-build</h1><p>Jalankan: <code>npm run setup</code> lalu restart server.</p></body></html>`,
+<h1>WebUI is not built yet</h1><p>Run: <code>npm run setup</code> then restart the server.</p></body></html>`,
     );
   }
   const ext = path.extname(file);

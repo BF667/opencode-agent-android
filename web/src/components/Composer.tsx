@@ -43,7 +43,7 @@ export function Composer({
               }
             }}
             rows={1}
-            placeholder="Tanya apa pun… (Enter kirim, Shift+Enter baris baru)"
+            placeholder="Ask anything… (Enter to send, Shift+Enter for a new line)"
             className="max-h-44 min-h-[40px] flex-1 resize-none bg-transparent px-2 py-1.5 text-[14px] leading-relaxed text-zinc-100 placeholder-zinc-600 outline-none"
             disabled={disabled}
           />
@@ -60,14 +60,14 @@ export function Composer({
               onClick={send}
               disabled={!value.trim() || disabled}
               className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-black transition enabled:hover:bg-zinc-200 disabled:opacity-30"
-              aria-label="Kirim"
+              aria-label="Send"
             >
               ↑
             </button>
           )}
         </div>
         <div className="mt-1.5 text-center text-[10.5px] text-zinc-600">
-          OpenCode Agent (Termux) · agent dapat menjalankan bash di workdir kamu
+          OpenCode Agent (Termux) · the agent can run bash in your workdir
         </div>
       </div>
     </div>

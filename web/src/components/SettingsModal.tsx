@@ -23,7 +23,7 @@ export function SettingsModal({
     "Z.ai (GLM)": { url: "https://api.z.ai/api/paas/v4", model: "glm-4.6" },
     OpenRouter: { url: "https://openrouter.ai/api/v1", model: "anthropic/claude-sonnet-4" },
     DeepSeek: { url: "https://api.deepseek.com/v1", model: "deepseek-chat" },
-    "Ollama (lokal)": { url: "http://127.0.0.1:11434/v1", model: "qwen2.5-coder:7b" },
+    "Ollama (local)": { url: "http://127.0.0.1:11434/v1", model: "qwen2.5-coder:7b" },
   };
 
   const save = async () => {
@@ -50,8 +50,8 @@ export function SettingsModal({
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-[15px] font-semibold text-zinc-100">Pengaturan Agent</h2>
-          <button onClick={onClose} className="text-zinc-500 hover:text-zinc-300" aria-label="Tutup">
+          <h2 className="text-[15px] font-semibold text-zinc-100">Agent Settings</h2>
+          <button onClick={onClose} className="text-zinc-500 hover:text-zinc-300" aria-label="Close">
             ✕
           </button>
         </div>
@@ -62,12 +62,12 @@ export function SettingsModal({
           onChange={(e) => setProvider(e.target.value)}
           className="mb-3 w-full rounded-lg border border-zinc-800 bg-zinc-900 px-3 py-2 text-[13px] text-zinc-200 outline-none focus:border-zinc-600"
         >
-          <option value="openai-compatible">OpenAI-compatible (Z.ai, OpenRouter, dll)</option>
+          <option value="openai-compatible">OpenAI-compatible (Z.ai, OpenRouter, etc.)</option>
           <option value="anthropic">Anthropic (Claude)</option>
-          <option value="mock">Mock / Demo (tanpa API)</option>
+          <option value="mock">Mock / Demo (no API)</option>
         </select>
 
-        <label className="mb-1 block text-[11.5px] font-medium text-zinc-400">Preset cepat</label>
+        <label className="mb-1 block text-[11.5px] font-medium text-zinc-400">Quick presets</label>
         <div className="mb-3 flex flex-wrap gap-1.5">
           {Object.entries(presets).map(([name, preset]) => (
             <button
@@ -101,13 +101,13 @@ export function SettingsModal({
         />
 
         <label className="mb-1 block text-[11.5px] font-medium text-zinc-400">
-          API Key {config.hasKey && <span className="text-emerald-400">(tersimpan)</span>}
+          API Key {config.hasKey && <span className="text-emerald-400">(saved)</span>}
         </label>
         <input
           type="password"
           value={apiKey}
           onChange={(e) => setApiKey(e.target.value)}
-          placeholder={config.hasKey ? "biarkan kosong untuk tetap pakai key lama" : "sk-…"}
+          placeholder={config.hasKey ? "leave empty to keep the existing key" : "sk-…"}
           className="mb-3 w-full rounded-lg border border-zinc-800 bg-zinc-900 px-3 py-2 text-[13px] text-zinc-200 outline-none focus:border-zinc-600"
         />
 
@@ -122,14 +122,14 @@ export function SettingsModal({
 
         <div className="flex justify-end gap-2">
           <button onClick={onClose} className="rounded-lg px-3 py-2 text-[13px] text-zinc-400 hover:bg-zinc-800">
-            Batal
+            Cancel
           </button>
           <button
             onClick={save}
             disabled={saving}
             className="rounded-lg bg-white px-4 py-2 text-[13px] font-medium text-black hover:bg-zinc-200 disabled:opacity-50"
           >
-            {saving ? "Menyimpan…" : "Simpan"}
+            {saving ? "Saving…" : "Save"}
           </button>
         </div>
       </div>

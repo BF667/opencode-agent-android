@@ -4,12 +4,12 @@
 // used for offline demo / self-testing on Termux without an API key.
 
 const MOCK_SCRIPT = [
-  { kind: "text", value: "Oke, gue cek dulu isi direktori kerjanya ya. 📱 *(Mode demo/mock — tidak ada panggilan API sungguhan)*" },
+  { kind: "text", value: "Alright, let me take a look at the working directory first. 📱 *(Demo/mock mode — no real API calls)*" },
   { kind: "tool", tool: "bash", args: { command: "ls -la" } },
 ];
-// Teks final dikirim hanya di round kedua (setelah hasil tool ada di history)
+// Final text is sent only in the second round (once the tool result is in history)
 const MOCK_FINAL =
-  "Itu isi direktori kerja kamu. Kalau mau pakai model asli, buka **Settings** (ikon roda gigi di sidebar) lalu isi:\n\n- **Base URL** contoh Z.ai: `https://api.z.ai/api/paas/v4`\n- **Model** contoh: `glm-4.6`\n- **API Key** dari dashboard provider kamu\n\nMau gue lanjut ngapa-ngapain lagi?";
+  "That is the content of your working directory. To use a real model, open **Settings** (the gear icon in the sidebar) and fill in:\n\n- **Base URL** — Z.ai example: `https://api.z.ai/api/paas/v4`\n- **Model** — example: `glm-4.6`\n- **API Key** from your provider's dashboard\n\nAnything else you want me to do?";
 
 function sseLine(line) {
   return line.startsWith("data:") ? line.slice(5).trim() : null;
@@ -140,8 +140,8 @@ async function* anthropicStream(cfg, body, signal) {
 }
 
 async function* mockStream(cfg, body, signal) {
-  // Jika sudah ada hasil tool di history (round kedua+), balas teks final saja
-  // supaya loop berhenti — meniru perilaku provider asli.
+  // If a tool result already exists in history (second round+), reply with the
+  // final text only so the loop stops — mirroring real provider behavior.
   const hasToolResult = (body.messages || []).some((m) => m.role === "tool");
   const script = hasToolResult
     ? [{ kind: "text", value: MOCK_FINAL }]

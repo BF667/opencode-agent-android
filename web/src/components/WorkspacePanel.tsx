@@ -66,7 +66,7 @@ export function WorkspacePanel({
           </button>
         ))}
         <div className="flex-1" />
-        <button onClick={onClose} className="text-zinc-500 hover:text-zinc-300" aria-label="Tutup panel">
+        <button onClick={onClose} className="text-zinc-500 hover:text-zinc-300" aria-label="Close panel">
           ✕
         </button>
       </div>
@@ -103,7 +103,7 @@ export function WorkspacePanel({
                 </pre>
               </>
             ) : (
-              <div className="p-2 text-[12px] text-zinc-600">Pilih file untuk dilihat.</div>
+              <div className="p-2 text-[12px] text-zinc-600">Select a file to view.</div>
             )}
           </div>
         </div>
@@ -115,7 +115,7 @@ export function WorkspacePanel({
             ref={termRef}
             className="min-h-0 flex-1 overflow-y-auto rounded-xl border border-zinc-800 bg-zinc-950 p-3 font-mono text-[11.5px] leading-relaxed text-zinc-400"
           >
-            {termOut || "Terminal workdir kamu. Semua perintah dijalankan tanpa sandbox — hati-hati."}
+            {termOut || "Your workdir terminal. All commands run without a sandbox — be careful."}
           </pre>
           <div className="mt-2 flex gap-2">
             <input
