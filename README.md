@@ -27,6 +27,25 @@ A port of the **agent package** from [anomalyco/opencode](https://github.com/ano
 
 ## Installing on Termux
 
+### One-liner install (recommended)
+
+Paste this in Termux — it installs everything and adds an `ocagent` command:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/BF667/opencode-agent-android/main/install.sh | bash
+```
+
+After install:
+
+```bash
+ocagent start    # start the server (http://localhost:3010)
+ocagent status   # check if it is running
+ocagent log      # tail the server log
+ocagent stop     # stop it
+```
+
+### Manual install
+
 > The production `web/dist/` bundle **is included** in this package — `setup-termux.sh` skips the build if dist already exists, so installation takes just a few seconds. Delete `web/dist/` if you want to rebuild from source.
 
 ```bash

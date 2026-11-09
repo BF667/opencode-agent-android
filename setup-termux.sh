@@ -60,7 +60,12 @@ CFG
   warn "Without an API key you can still try the demo mode: provider = \"mock\"."
 fi
 
-# 4. Start
+# 4. Start (skipped when OPENCODE_AGENT_NO_RUN=1, e.g. from install.sh)
+if [ "${OPENCODE_AGENT_NO_RUN:-0}" = "1" ]; then
+  say "Setup complete (OPENCODE_AGENT_NO_RUN=1) — start the server with: npm start"
+  exit 0
+fi
+
 say "Checking handset type (optional)…"
 command -v termux-wake-lock >/dev/null 2>&1 && termux-wake-lock || true
 
