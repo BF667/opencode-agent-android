@@ -1,0 +1,19 @@
+{
+  "name": "@opencode/agent-android",
+  "version": "1.0.0",
+  "description": "OpenCode agent package ported for Android/Termux only - fullstack Vite WebUI, no TUI/CLI",
+  "license": "MIT",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node server/index.js",
+    "web:dev": "npm --prefix web run dev",
+    "web:build": "npm --prefix web run build",
+    "setup": "npm --prefix web install && npm --prefix web run build"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": ["opencode", "agent", "termux", "android", "vite", "webui"]
+}
