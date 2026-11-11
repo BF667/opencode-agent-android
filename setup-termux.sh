@@ -37,12 +37,15 @@ say "Node $(node -v) ready."
 if [ -f web/dist/index.html ]; then
   say "Bundled WebUI found — skipping build. (delete web/dist/ to rebuild)"
 else
-  say "Installing WebUI dependencies + building (one-time, ~1-2 min)…"
-  npm install --prefix web --no-audit --no-fund
+  say "No bundled WebUI found — installing dependencies + building (one-time, ~1-2 min)…"
+  # retries help on flaky mobile networks (ECONNRESET etc.)
+  npm install --prefix web --no-audit --no-fund --fetch-retries=5 --fetch-retry-maxtimeout=120000 --fetch-timeout=600000 \
+    || npm install --prefix web --no-audit --no-fund --fetch-retries=5 --fetch-retry-maxtimeout=120000 --fetch-timeout=600000 \
+    || { warn "npm install failed twice. Try: npm cache clean --force && npm install --prefix web"; exit 1; }
   npm --prefix web run build
 fi
 
-# 3. Config awal
+# 3. Initial config
 if [ ! -f "$HOME/.opencode-agent/config.json" ]; then
   say "Creating initial config at $HOME/.opencode-agent/config.json"
   mkdir -p "$HOME/.opencode-agent"
